@@ -16,9 +16,8 @@
   - ![image](https://github.com/user-attachments/assets/0c9e6c50-7626-4024-b157-cf3b1b9bcd76)
 
 
-まず、node.jsをインストールしてください。
-Reactをインストールしてください。そして
-（多分Reactのインストール方法をググればいい）
+動かすにはnode.jsをインストールしてください。
+https://react-js.jp/setup
 
 ---
 
