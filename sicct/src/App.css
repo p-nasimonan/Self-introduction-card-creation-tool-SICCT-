@@ -1,0 +1,18 @@
+/**
+ * @file App.css
+ * @brief アプリケーションのスタイルシート
+ * @details アプリケーション全体のスタイルを定義します。
+ */
+
+.spotify {
+  width: 60px;
+  height: 60px;
+}
+.genshin {
+  width: 60px;
+  height: 60px;
+}
+.github {
+  width: 60px;
+  height: 60px;
+}
