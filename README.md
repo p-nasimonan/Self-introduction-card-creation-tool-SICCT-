@@ -8,32 +8,26 @@
 ## Gitの使い方
 機能を追加するごとにブランチしてプルリクくれたらうれしいけど、まずはcloneしてみよう！
 
-### コマンドもしくは[GitHub Desktop](https://docs.github.com/ja/desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop)でGUIで操作
-クローン（詳細はググって）
+### コマンドもしくは[GitHub Desktop](https://docs.github.com/ja/desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop)のGUIで操作
+#### クローン（コピーみたいなやつ詳細はググって）
 - ターミナルなどでプロジェクトをコピーしたい任意のディレクトリで
   - `git clone https://github.com/p-nasimonan/Self-introduction-card-creation-tool-SICCT-.git`
 - GitHub Desktopの場合は
   - ![image](https://github.com/user-attachments/assets/0c9e6c50-7626-4024-b157-cf3b1b9bcd76)
 
-
-動かすにはnode.jsをインストールしてください。
+## 環境構築
+node.jsをインストール
 https://react-js.jp/setup
 
----
+## プロジェクトディレクトリに移動する
+`cd Self-introduction-card-creation-tool-SICCT-/sicct`
 
-[Create React App](https://github.com/facebook/create-react-app).でつくったっぞい
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 実行する
+`npm start`
 
 ## トラブルシューティング
 - npmstartでエラー出たらおそらくディレクトリが違う
+  - `pwd`で今いる場所を確かめてみよう
 
 - もし何かライブラリがない的なことを言われれて無理だったら
   - `npm install`
