@@ -17,10 +17,76 @@
   height: 60px;
 }
 
-.intro-card-form {
+.intro-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.intro-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.intro-card-header h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.intro-card-header input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+.intro-card-body {
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
-  align-items:first baseline;
-  margin-left: 40%;
+  gap: 20px;
+}
+
+.intro-card-section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.intro-card-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.intro-card-section input,
+.intro-card-section select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
