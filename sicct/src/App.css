@@ -16,3 +16,11 @@
   width: 60px;
   height: 60px;
 }
+
+.intro-card-form {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items:first baseline;
+  margin-left: 40%;
+}
