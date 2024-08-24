@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import './App.css';
 import axios from 'axios';
+
 /**
  * @file IntroCard.js
  * @brief 自己紹介カード作成コンポーネント
  * @details ユーザーが自己紹介カードを作成するための画面を提供します。
  */
-
-
 
 function IntroCard() {
   const [exportMode, setExportMode] = useState(false);
@@ -22,8 +21,6 @@ function IntroCard() {
   const [githubUrl, setGithubUrl] = useState("");
   const [genshinData, setGenshinData] = useState(null);
   const [error, setError] = useState(null);
-
-  
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -48,12 +45,14 @@ function IntroCard() {
     setGithubUrl(e.target.value);
   };
 
+  console.log(game);
+
+  // python flaskに送って、genshinDataを取得する
   const getGameData = (game, gameId) => {
     if (game === "genshin") {
-      setGenshinId(gameId);
-      const api = process.env.GENSHIN_API_CONTEXT+gameId;
-      console.log(`Fetching data from: ${api}`);
-      axios.get(api)
+      const url = `${process.env.REACT_APP_BACKEND_URL}/genshin/${gameId}`;
+      console.log(`Fetching data from: ${url}`);
+      axios.get(url)
         .then(response => {
           console.log(response.data);
           setGenshinData(response.data);
@@ -126,10 +125,15 @@ function IntroCard() {
               <option value="hosuta">崩壊スターレール</option>
               <option value="zzz">ゼレンスゾーンゼロ</option>
               <option value="other">その他</option>
-              
             </select>
             {inputGame}
-            {GameName(game, gameId)}
+            {game === "genshin" && genshinData && (
+              <div className='export-mode-content'>
+                <p>ニックネーム: {genshinData.playerInfo.nickname}</p>
+                <p>世界ランク: {genshinData.playerInfo.worldLevel}</p>
+                <p>ステータスメッセージ: {genshinData.playerInfo.signature}</p>
+              </div>
+            )}
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>
