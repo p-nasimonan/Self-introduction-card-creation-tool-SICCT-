@@ -45,22 +45,21 @@ function IntroCard() {
   };
 
   console.log(game);
+  console.log(genshinData)
 
   // python flaskに送って、genshinDataを取得する
   const getGameData = (game, gameId) => {
     if (game === "genshin") {
       const url = `${process.env.REACT_APP_BACKEND_URL}/genshin/${gameId}`;
       console.log(`Fetching data from: ${url}`);
-      return axios.get(url)
+      axios.get(url)
         .then(response => {
           console.log(response.data);
           setGenshinData(response.data);
-          return response.data;
         })
         .catch(error => {
           console.error('Error fetching data:', error);
           setError(`Error fetching data: ${error.message}`);
-          throw error;
         });
     }
   };
@@ -80,25 +79,27 @@ function IntroCard() {
       }
   };
 
+  const displayGameInfo = () => {
+  genshinData && (
+    <div className='export-mode-content'>
+      <p>ニックネーム: {genshinData.playerInfo.nickname}</p>
+      <p>世界ランク: {genshinData.playerInfo.worldLevel}</p>
+      <p>ステータスメッセージ: {genshinData.playerInfo.signature}</p>
+      <p>プロフィールキャラクター: {genshinData.avatarInfoList.map(avatar => avatar.name).join(', ')}</p>
+    </div>
+  )};
+
   const exportAsImage = () => {
     setExportMode(true);
     const cardElement = document.querySelector('.intro-card');
     cardElement.classList.add('export-mode');
-
-    getGameData(game, gameId)
-      .then(() => {
-        // JSONデータが取得できたら写真を撮る
-        html2canvas(cardElement).then((canvas) => {
-          const link = document.createElement('a');
-          link.href = canvas.toDataURL('image/png');
-          link.download = 'intro_card.png';
-          link.click();
-        });
-      })
-      .catch(error => {
-        console.error('Error during export:', error);
-        setExportMode(false);
-      });
+    html2canvas(cardElement).then((canvas) => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'intro_card.png';
+      link.click();
+      cardElement.classList.remove('export-mode');
+    }); // ここに閉じ括弧を追加
   };
 
   const inputGame = () => {
@@ -137,14 +138,9 @@ function IntroCard() {
             </select>
             {inputGame()}
             {GameName()}
-            {game === "genshin" && genshinData && (
-              <div className='export-mode-content'>
-                <p>ニックネーム: {genshinData.playerInfo.nickname}</p>
-                <p>世界ランク: {genshinData.playerInfo.worldLevel}</p>
-                <p>ステータスメッセージ: {genshinData.playerInfo.signature}</p>
-                <p>プロフィールキャラクター: {genshinData.avatarInfoList.map(avatar => avatar.name).join(', ')}</p>
-              </div>
-            )}
+            {displayGameInfo}
+            <button type="button" onClick={() => getGameData(game, gameId)}>ゲームデータを取得</button>
+
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>
