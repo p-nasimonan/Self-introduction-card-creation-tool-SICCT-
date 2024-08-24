@@ -14,7 +14,6 @@ function IntroCard() {
   const [isGithubChecked, setIsGithubChecked] = useState(false);
   const [game, setGame] = useState("");
   const [gameId, setGameId] = useState("");
-  const [genshinId, setGenshinId] = useState("");
   const [name, setName] = useState("");
   const [hobby, setHobby] = useState("");
   const [introduction, setIntroduction] = useState("");
@@ -52,19 +51,22 @@ function IntroCard() {
     if (game === "genshin") {
       const url = `${process.env.REACT_APP_BACKEND_URL}/genshin/${gameId}`;
       console.log(`Fetching data from: ${url}`);
-      axios.get(url)
+      return axios.get(url)
         .then(response => {
           console.log(response.data);
           setGenshinData(response.data);
+          return response.data;
         })
         .catch(error => {
           console.error('Error fetching data:', error);
+          setError(`Error fetching data: ${error.message}`);
+          throw error;
         });
     }
   };
   
 
-  const GameName = (game, gameId) => {
+  const GameName = () => {
     if (game === "genshin") {
       return <span className="export-mode-content">原神 UID: {gameId}</span>;
     } else if (game === "hosuta") {
@@ -79,28 +81,35 @@ function IntroCard() {
   };
 
   const exportAsImage = () => {
-    getGameData(game, gameId);
     setExportMode(true);
     const cardElement = document.querySelector('.intro-card');
     cardElement.classList.add('export-mode');
-    html2canvas(cardElement).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL('image/png');
-      link.download = 'intro_card.png';
-      link.click();
-      cardElement.classList.remove('export-mode');
-    });
-    setExportMode(false);
+
+    getGameData(game, gameId)
+      .then(() => {
+        // JSONデータが取得できたら写真を撮る
+        html2canvas(cardElement).then((canvas) => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = 'intro_card.png';
+          link.click();
+        });
+      })
+      .catch(error => {
+        console.error('Error during export:', error);
+        setExportMode(false);
+      });
   };
 
-  let inputGame;
-  if (game === "genshin" || game === "hosuta" || game === "zzz") {
-    inputGame = <input type="text" name="other" placeholder="ユーザーIDを入力してください" onChange={handleGameIdChange} value={gameId} />;
-  } else if (game === "none" || game === "") {
-    inputGame = "";
-  } else {
-    inputGame = <input type="text" name="other" placeholder="その他のゲームを入力してください" onChange={handleGameIdChange} value={gameId} />;
+  const inputGame = () => {
+    if (game === "genshin" || game === "hosuta" || game === "zzz") {
+      return <input type="text" name="other" placeholder="ユーザーIDを入力してください" onChange={handleGameIdChange} value={gameId} />;
+    } else if (game === "none" || game === "") {
+      return "";
+    } else {
+    return <input type="text" name="other" placeholder="その他のゲームを入力してください" onChange={handleGameIdChange} value={gameId} />;
   }
+  };
 
   return (
     <div>
@@ -126,12 +135,14 @@ function IntroCard() {
               <option value="zzz">ゼレンスゾーンゼロ</option>
               <option value="other">その他</option>
             </select>
-            {inputGame}
+            {inputGame()}
+            {GameName()}
             {game === "genshin" && genshinData && (
               <div className='export-mode-content'>
                 <p>ニックネーム: {genshinData.playerInfo.nickname}</p>
                 <p>世界ランク: {genshinData.playerInfo.worldLevel}</p>
                 <p>ステータスメッセージ: {genshinData.playerInfo.signature}</p>
+                <p>プロフィールキャラクター: {genshinData.avatarInfoList.map(avatar => avatar.name).join(', ')}</p>
               </div>
             )}
           </div>
