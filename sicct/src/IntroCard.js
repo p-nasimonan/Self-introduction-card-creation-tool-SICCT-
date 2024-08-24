@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import './App.css';
+import axios from 'axios';
 /**
  * @file IntroCard.js
  * @brief 自己紹介カード作成コンポーネント
@@ -10,16 +11,19 @@ import './App.css';
 
 
 function IntroCard() {
+  const [exportMode, setExportMode] = useState(false);
   const [isGithubChecked, setIsGithubChecked] = useState(false);
   const [game, setGame] = useState("");
   const [gameId, setGameId] = useState("");
+  const [genshinId, setGenshinId] = useState("");
   const [name, setName] = useState("");
   const [hobby, setHobby] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [genshinData, setGenshinData] = useState(null);
   const [error, setError] = useState(null);
-  const genshinAPI_new = "https://enka.network/api/uid/"+{}
+
+  
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -44,28 +48,26 @@ function IntroCard() {
     setGithubUrl(e.target.value);
   };
 
-  const getGenshinData = async (gameId) => {
-    try {
-      const url = "http/genshin/api/url" + gameId;
-      console.log(`Fetching data from: ${url}`);
-      const response = await fetch(url);
-      console.log(`Response status: ${response.status}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log('Data received:', data);
-      setGenshinData(data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setError(error.message);
+  const getGameData = (game, gameId) => {
+    if (game === "genshin") {
+      setGenshinId(gameId);
+      const api = process.env.GENSHIN_API_CONTEXT+gameId;
+      console.log(`Fetching data from: ${api}`);
+      axios.get(api)
+        .then(response => {
+          console.log(response.data);
+          setGenshinData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     }
   };
+  
 
   const GameName = (game, gameId) => {
     if (game === "genshin") {
-      getGenshinData(gameId);
-      return <span className="export-mode-content">原神 UID: {gameId} {genshinData ? JSON.stringify(genshinData) : ''}</span>;
+      return <span className="export-mode-content">原神 UID: {gameId}</span>;
     } else if (game === "hosuta") {
       return <span className="export-mode-content">崩壊スターレール UID: {gameId}</span>;
     } else if (game === "zzz") {
@@ -74,10 +76,12 @@ function IntroCard() {
       return <span className="export-mode-content">{gameId}</span>;
     } else {
       return "";
-    }
+      }
   };
 
   const exportAsImage = () => {
+    getGameData(game, gameId);
+    setExportMode(true);
     const cardElement = document.querySelector('.intro-card');
     cardElement.classList.add('export-mode');
     html2canvas(cardElement).then((canvas) => {
@@ -87,6 +91,7 @@ function IntroCard() {
       link.click();
       cardElement.classList.remove('export-mode');
     });
+    setExportMode(false);
   };
 
   let inputGame;
