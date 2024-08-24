@@ -7,7 +7,6 @@ import './App.css';
  * @details ユーザーが自己紹介カードを作成するための画面を提供します。
  */
 
-const genshinApiUrl = "https://enka.network/api/uid/";
 
 function IntroCard() {
   const [isGithubChecked, setIsGithubChecked] = useState(false);
@@ -17,6 +16,8 @@ function IntroCard() {
   const [hobby, setHobby] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
+  const [genshinData, setGenshinData] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -26,7 +27,7 @@ function IntroCard() {
     setGameId(""); // Reset gameId when game changes
   };
   const handleGameIdChange = (e) => {
-    setGameId(e.target.value);
+    setGameId(e.target.value.trim());
   };
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -41,13 +42,48 @@ function IntroCard() {
     setGithubUrl(e.target.value);
   };
 
+  const getGenshinData = async (gameId) => {
+    try {
+      const url = "/genshin/" + gameId;
+      console.log(`Fetching data from: ${url}`);
+      const response = await fetch(url);
+      console.log(`Response status: ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Data received:', data);
+      setGenshinData(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error.message);
+    }
+  };
+
+  const GameName = (game, gameId) => {
+    if (game === "genshin") {
+      getGenshinData(gameId);
+      return <span className="export-mode-content">原神 UID: {gameId} {genshinData ? JSON.stringify(genshinData) : ''}</span>;
+    } else if (game === "hosuta") {
+      return <span className="export-mode-content">崩壊スターレール UID: {gameId}</span>;
+    } else if (game === "zzz") {
+      return <span className="export-mode-content">ゼレンスゾーンゼロ UID: {gameId}</span>;
+    } else if (game === "other") {
+      return <span className="export-mode-content">{gameId}</span>;
+    } else {
+      return "";
+    }
+  };
+
   const exportAsImage = () => {
     const cardElement = document.querySelector('.intro-card');
+    cardElement.classList.add('export-mode');
     html2canvas(cardElement).then((canvas) => {
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
       link.download = 'intro_card.png';
       link.click();
+      cardElement.classList.remove('export-mode');
     });
   };
 
@@ -67,11 +103,13 @@ function IntroCard() {
         <div className='intro-card-header'>
           <h3>自己紹介</h3>
           <input type="text" name="name" placeholder="名前" onChange={handleNameChange} value={name} />
+          <span className="export-mode-content">{name}</span>
         </div>
         <div className='intro-card-body'>
           <div className='intro-card-section'>
             <h4>趣味</h4>
             <input type="text" name="hobby" placeholder="趣味" onChange={handleHobbyChange} value={hobby} />
+            <span className="export-mode-content">{hobby}</span>
           </div>
           <div className='intro-card-section'>
             <h4>好きなゲーム</h4>
@@ -81,22 +119,28 @@ function IntroCard() {
               <option value="hosuta">崩壊スターレール</option>
               <option value="zzz">ゼレンスゾーンゼロ</option>
               <option value="other">その他</option>
-
+              
             </select>
             {inputGame}
+            {GameName(game, gameId)}
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>
             <input type="text" name="introduction" placeholder="一言" onChange={handleIntroductionChange} value={introduction} />
+            <span className="export-mode-content">{introduction}</span>
           </div>
-          <div className='intro-card-section'>
-            <h4>GitHub</h4>
-            <input type="checkbox" name="github" checked={isGithubChecked} onChange={handleGithubChange} />
-            {isGithubChecked && <input type="text" name="github" placeholder="GitHubのURLを入力してください" onChange={handleGithubUrlChange} value={githubUrl} />}
-          </div>
+          {isGithubChecked && (
+            <div className='intro-card-section'>
+              <h4>GitHub</h4>
+              <input type="checkbox" name="github" checked={isGithubChecked} onChange={handleGithubChange} />
+              <input type="text" name="github" placeholder="GitHubのURLを入力してください" onChange={handleGithubUrlChange} value={githubUrl} />
+              <span className="export-mode-content">{githubUrl}</span>
+            </div>
+          )}
         </div>
         <button type="button" onClick={exportAsImage}>カードを画像として保存</button>
       </div>
+      {error && <p className="error-message">エラーが発生しました: {error}</p>}
     </div>
   );
 }

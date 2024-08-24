@@ -64,6 +64,7 @@
   font-size: 18px;
 }
 
+
 .intro-card-section input,
 .intro-card-section select {
   width: 100%;
@@ -74,7 +75,7 @@
   font-size: 16px;
 }
 
-button {
+.intro-card-section button {
   display: block;
   width: 100%;
   padding: 10px;
@@ -87,6 +88,36 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.intro-card-section button:hover {
   background-color: #0056b3;
+}
+
+
+.export-mode h4 {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+/* 画像エクスポート時に特定の要素を非表示にするスタイル */
+.export-mode input,
+.export-mode select,
+.export-mode button,
+.export-mode .intro-card-section input[type="checkbox"] {
+  display: none;
+}
+
+.export-mode .export-mode-content {
+  display: block;
+}
+
+.export-mode-content {
+  display: none;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
 }
