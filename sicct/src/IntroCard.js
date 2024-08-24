@@ -17,6 +17,7 @@ function IntroCard() {
   const [hobby, setHobby] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -41,6 +42,17 @@ function IntroCard() {
     setGithubUrl(e.target.value);
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
   const exportAsImage = () => {
     const cardElement = document.querySelector('.intro-card');
     html2canvas(cardElement).then((canvas) => {
