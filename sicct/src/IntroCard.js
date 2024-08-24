@@ -8,6 +8,7 @@ import './App.css';
  */
 
 
+
 function IntroCard() {
   const [isGithubChecked, setIsGithubChecked] = useState(false);
   const [game, setGame] = useState("");
@@ -18,6 +19,7 @@ function IntroCard() {
   const [githubUrl, setGithubUrl] = useState("");
   const [genshinData, setGenshinData] = useState(null);
   const [error, setError] = useState(null);
+  const genshinAPI_new = "https://enka.network/api/uid/"+{}
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -44,7 +46,7 @@ function IntroCard() {
 
   const getGenshinData = async (gameId) => {
     try {
-      const url = "/genshin/" + gameId;
+      const url = "http/genshin/api/url" + gameId;
       console.log(`Fetching data from: ${url}`);
       const response = await fetch(url);
       console.log(`Response status: ${response.status}`);
