@@ -15,9 +15,10 @@ function IntroCard() {
   const [gameId, setGameId] = useState("");
   const [name, setName] = useState("");
   const [hobby, setHobby] = useState("");
+  const [music, setMusic] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
-  const [profileImage, setProfileImage] = useState(null);
 
   const handleGithubChange = (e) => {
     setIsGithubChecked(e.target.checked);
@@ -35,22 +36,17 @@ function IntroCard() {
   const handleHobbyChange = (e) => {
     setHobby(e.target.value);
   };
+  const handleMusicChange = (e) => { 
+    setMusic(e.target.value);
+  };
+  const handleImageUrlChange = (e) => { 
+    setImageUrl(e.target.value);
+  };
   const handleIntroductionChange = (e) => {
     setIntroduction(e.target.value);
   };
   const handleGithubUrlChange = (e) => {
     setGithubUrl(e.target.value);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
   
   const exportAsImage = () => {
@@ -96,6 +92,15 @@ function IntroCard() {
 
             </select>
             {inputGame}
+          </div>
+          <div className='intro-card-section'>
+            <h4>好きな画像</h4>
+            <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} />
+            {imageUrl && <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100%', height: 'auto' }} />}
+          </div>
+          <div className='intro-card-section'>
+            <h4>好きな音楽</h4>
+            <input type="text" name="music" placeholder="好きな音楽" onChange={handleMusicChange} value={music} />
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>
