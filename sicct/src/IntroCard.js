@@ -144,15 +144,15 @@ function IntroCard() {
       <h2>自己紹介カード作成画面</h2>
       <div className='intro-card'>
         <div className='intro-card-header'>
-          <h3>自己紹介</h3>
+          <h2>自己紹介</h2>
           <input type="text" name="name" placeholder="名前" onChange={handleNameChange} value={name} className="export-mode-content" />
-          <span className="export-mode-content">{name}</span>
+          <h3>名前: {name}</h3>
         </div>
         <div className='intro-card-body'>
           <div className='intro-card-section'>
             <h4>趣味</h4>
             <input type="text" name="hobby" placeholder="趣味" onChange={handleHobbyChange} value={hobby} className="export-mode-content" />
-            <span className="export-mode-content">{hobby}</span>
+            <span>{hobby}</span>
           </div>
           <div className='intro-card-section'>
             <h4>好きなゲーム</h4>
@@ -170,16 +170,15 @@ function IntroCard() {
           <div className='intro-card-section'>
             <h4>一言</h4>
             <input type="text" name="introduction" placeholder="一言" onChange={handleIntroductionChange} value={introduction} className="export-mode-content" />
-            <span className="export-mode-content">{introduction}</span>
+            <span>{introduction}</span>
           </div>
           <div className='intro-card-section'>
             <h4>GitHub</h4>
             <p className="export-mode-content">GitHUbはしてますか？</p><input type="checkbox" name="github" checked={isGithubChecked} onChange={handleGithubChange} className="export-mode-content" />
             {isGithubChecked && (
               <div>
-                <h4>GitHub</h4>
                 <input type="text" name="github" placeholder="GitHubのURLを入力してください" onChange={handleGithubUrlChange} value={githubUrl} className="export-mode-content" />
-                <span className="export-mode-content">{githubUrl}</span>
+                <span>{githubUrl}</span>
               </div>
             )}
           </div>
