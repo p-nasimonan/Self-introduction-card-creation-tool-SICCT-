@@ -21,7 +21,8 @@ function IntroCard() {
   const [music, setMusic] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [introduction, setIntroduction] = useState("");
-  const [githubUrl, setGithubUrl] = useState("");
+  const [githubUser, setGithubUser] = useState("");
+  const [githubData, setGithubData] = useState(null);
   const [genshinData, setGenshinData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -50,9 +51,26 @@ function IntroCard() {
   const handleIntroductionChange = (e) => {
     setIntroduction(e.target.value);
   };
-  const handleGithubUrlChange = (e) => {
-    setGithubUrl(e.target.value);
+  const handleGithubUserChange = (e) => {
+    setGithubUser(e.target.value);
   };
+
+  const getGithubUserData = () => {
+    const url = `${process.env.REACT_APP_BACKEND_URL}/github/${githubUser}`;
+    return axios.get(url)
+      .then(response => {
+        console.log(response.data);
+        setGithubData(response.data);
+        setError(null);  // エラーをクリア
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setError(`Error fetching data: ${error.message}`);
+        throw error;
+      });
+  };
+
 
 
   // Flaskバックエンドから原神データを取得する
@@ -140,6 +158,30 @@ function IntroCard() {
     }
   };
 
+  const displayGithubData = () => {
+    if (githubData) {
+      return (
+        <div className='github-data'>
+        <img src={githubData[0].owner.avatar_url} alt="GitHubアイコン" />
+        <p>{githubData[0].owner.login}</p>
+        <p>{githubData[0].followers}</p>
+        <p>{githubData[0].following}</p>
+        {githubData.map(data => (
+          <div>
+          <h4>{data.name}</h4>
+          <p>{data.description}</p>
+          <p>言語:{data.language}</p>
+          </div>
+        ))}
+
+        </div>
+
+
+
+      );
+    }
+  };
+
   let inputGame;
   if (game === "genshin" || game === "hosuta" || game === "zzz") {
     inputGame = <input type="text" name="other" placeholder="ユーザーIDを入力してください" onChange={handleGameIdChange} value={gameId} className="export-mode-content" />;
@@ -186,7 +228,7 @@ function IntroCard() {
           </div>
           <div className='intro-card-section'>
             <h4>好きな音楽</h4>
-            <input type="text" name="music" placeholder="好きな音楽" onChange={handleMusicChange} value={music} />
+            <input type="text" name="music" placeholder="好きな音楽" onChange={handleMusicChange} value={music} className="export-mode-content" />
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>
@@ -195,11 +237,12 @@ function IntroCard() {
           </div>
           <div className='intro-card-section'>
             <h4>GitHub</h4>
-            <p className="export-mode-content">GitHUbはしてますか？</p><input type="checkbox" name="github" checked={isGithubChecked} onChange={handleGithubChange} className="export-mode-content" />
+            <p>GitHUbはしてますか？</p><input type="checkbox" name="github" checked={isGithubChecked} onChange={handleGithubChange} className="export-mode-content" />
             {isGithubChecked && (
               <div>
-                <input type="text" name="github" placeholder="GitHubのURLを入力してください" onChange={handleGithubUrlChange} value={githubUrl} className="export-mode-content" />
-                <span>{githubUrl}</span>
+                <input type="text" name="github" placeholder="GitHubのユーザー名" onChange={handleGithubUserChange} value={githubUser} className="export-mode-content" />
+                <button type="button" onClick={getGithubUserData} className="export-mode-content">GitHubデータを取得</button>
+                {displayGithubData()}
               </div>
             )}
           </div>

@@ -196,3 +196,15 @@
   margin-top: 20px;
 }
 
+.github-data {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.github-data h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #324c68;
+  border-bottom: 1px solid #324c68;
+}

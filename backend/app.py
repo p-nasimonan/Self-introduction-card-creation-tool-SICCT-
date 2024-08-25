@@ -14,5 +14,13 @@ def get_genshin_data(uid):
     except Exception as e:
         return flask.jsonify({"error": str(e)}), 500
 
+@app.route("/github/<user>")
+def get_github_data(user):
+    try:
+        response = requests.get(f"https://api.github.com/users/{user}/repos")
+        return response.json()
+    except Exception as e:
+        return flask.jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
