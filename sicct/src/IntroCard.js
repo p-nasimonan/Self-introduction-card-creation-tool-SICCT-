@@ -75,11 +75,13 @@ function IntroCard() {
         <div className='intro-card-header' style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
           <h3>自己紹介</h3>
           <input type="text" name="name" placeholder="名前" onChange={handleNameChange} value={name} />
-          {imageUrl ? (
-            <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100px', height: 'auto', marginLeft: '10px' }} />
-          ) : (
-          <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} />
-          )}
+          {(() => {
+  if (imageUrl) {
+    return <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100px', height: 'auto', marginLeft: '10px' }} />;
+  } else {
+    return <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} />;
+  }
+})()}
         </div>
         <div className='intro-card-body'>
           <div className='intro-card-section'>
