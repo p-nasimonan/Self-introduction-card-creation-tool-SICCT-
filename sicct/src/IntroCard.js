@@ -18,6 +18,8 @@ function IntroCard() {
   const [gameId, setGameId] = useState("");
   const [name, setName] = useState("");
   const [hobby, setHobby] = useState("");
+  const [music, setMusic] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
   const [genshinData, setGenshinData] = useState(null);
@@ -39,12 +41,19 @@ function IntroCard() {
   const handleHobbyChange = (e) => {
     setHobby(e.target.value);
   };
+  const handleMusicChange = (e) => { 
+    setMusic(e.target.value);
+  };
+  const handleImageUrlChange = (e) => { 
+    setImageUrl(e.target.value);
+  };
   const handleIntroductionChange = (e) => {
     setIntroduction(e.target.value);
   };
   const handleGithubUrlChange = (e) => {
     setGithubUrl(e.target.value);
   };
+
 
   // Flaskバックエンドから原神データを取得する
   const getGenshinData = (genshinId) => {
@@ -67,6 +76,7 @@ function IntroCard() {
   const handleGetGameData = () => {
     getGenshinData(gameId);
   };
+
 
   const exportAsImage = () => {
     setExportMode(true);
@@ -143,9 +153,16 @@ function IntroCard() {
     <div>
       <h2>自己紹介カード作成画面</h2>
       <div className='intro-card'>
-        <div className='intro-card-header'>
+        <div className='intro-card-header' style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
           <h2>自己紹介</h2>
           <input type="text" name="name" placeholder="名前" onChange={handleNameChange} value={name} className="export-mode-content" />
+          {(() => {
+          if (imageUrl) {
+            return <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100px', height: 'auto', marginLeft: '10px' }} />;
+          } else {
+            return <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} className="export-mode-content" />;
+          }
+        })()}
           <h3>名前: {name}</h3>
         </div>
         <div className='intro-card-body'>
@@ -166,6 +183,10 @@ function IntroCard() {
             {inputGame}
             <button type="button" onClick={handleGetGameData} className="export-mode-content">ゲームデータを取得</button>
             {displayGameInfo()}
+          </div>
+          <div className='intro-card-section'>
+            <h4>好きな音楽</h4>
+            <input type="text" name="music" placeholder="好きな音楽" onChange={handleMusicChange} value={music} />
           </div>
           <div className='intro-card-section'>
             <h4>一言</h4>

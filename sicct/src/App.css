@@ -113,6 +113,7 @@
   background-color: #0056b3;
 }
 
+
 /* 画像エクスポート時に特定の要素を非表示にするスタイル */
 .export-mode .export-mode-content {
   display: none;
@@ -192,3 +193,4 @@
   text-align: center;
   margin-top: 20px;
 }
+
