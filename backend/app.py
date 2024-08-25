@@ -15,4 +15,4 @@ def get_genshin_data(uid):
         return flask.jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(port="8383")
+    app.run(port="5000")
