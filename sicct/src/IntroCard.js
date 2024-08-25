@@ -116,10 +116,20 @@ function IntroCard() {
     return `https://enka.network/ui/${characters[avatarId]?.SideIconName}.png`;
   };
 
-  // 聖遺物画像URLに変換する関数
-  const getEquipmentImageUrl = (avatar, index) => {
+/**
+ * 装備の画像URLを取得する関数
+ * @param {Object} equipment - 装備オブジェクト
+ * @returns {string} - 画像URL
+ */
+  function getEquipmentImageUrl(avatar, index) {
+    // flatプロパティが存在するか確認
+    if (!avatar || !avatar.equipList[index]) {
+        console.error('flatプロパティが未定義です:', avatar);
+        return ``;
+    }
+    console.log(avatar.equipList[index]);
     return `https://enka.network/ui/${avatar.equipList[index].flat.icon}.png`;
-  };
+  }
 
   const getnamecardImageUrl = (namecardId) => {
     return `https://enka.network/ui/${namecards[namecardId]?.icon}.png`;
