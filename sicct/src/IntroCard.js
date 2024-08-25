@@ -72,9 +72,14 @@ function IntroCard() {
     <div>
       <h2>自己紹介カード作成画面</h2>
       <div className='intro-card'>
-        <div className='intro-card-header'>
+        <div className='intro-card-header' style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
           <h3>自己紹介</h3>
           <input type="text" name="name" placeholder="名前" onChange={handleNameChange} value={name} />
+          {imageUrl ? (
+            <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100px', height: 'auto', marginLeft: '10px' }} />
+          ) : (
+          <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} />
+          )}
         </div>
         <div className='intro-card-body'>
           <div className='intro-card-section'>
@@ -92,11 +97,6 @@ function IntroCard() {
 
             </select>
             {inputGame}
-          </div>
-          <div className='intro-card-section'>
-            <h4>好きな画像</h4>
-            <input type="text" name="image" placeholder="画像のURLを入力してください" onChange={handleImageUrlChange} value={imageUrl} />
-            {imageUrl && <img src={imageUrl} alt="好きな画像" style={{ maxWidth: '100%', height: 'auto' }} />}
           </div>
           <div className='intro-card-section'>
             <h4>好きな音楽</h4>
